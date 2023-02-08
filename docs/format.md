@@ -39,7 +39,10 @@ struct {
 
 ```c++
 typedef struct {
-  float matrix?[16];
+  float position[4];
+  float rotation_quaternion[4];
+  float unk[4];
+  float scale[4];
   int32_t bone_parent;
   int32_t u44;
   int32_t u48;
