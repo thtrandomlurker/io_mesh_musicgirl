@@ -66,15 +66,15 @@ def LoadMDL(path):
         bpy.ops.object.armature_add(enter_editmode=True, location=(0, 0, 0))
         arm = bpy.context.active_object
         for b in range(bone_count):
-            bone_m0 = struct.unpack("<ffff", f.read(16))
-            bone_m1 = struct.unpack("<ffff", f.read(16))
-            bone_m2 = struct.unpack("<ffff", f.read(16))
-            bone_m3 = struct.unpack("<ffff", f.read(16))
+            bone_pos = struct.unpack("<ffff", f.read(16))
+            bone_rot = struct.unpack("<ffff", f.read(16))
+            bone_unk = struct.unpack("<ffff", f.read(16))
+            bone_scl = struct.unpack("<ffff", f.read(16))
             bone_parent = struct.unpack("<i", f.read(4))[0]
             bone_unk = struct.unpack("<I", f.read(4))[0]
             bone_length = struct.unpack("<f", f.read(4))[0]
             bone_unk2 = struct.unpack("<I", f.read(4))[0]
-            bone_mat = mathutils.Matrix([bone_m0, bone_m1, bone_m2, bone_m3])
+            bone_mat = mathutils.Matrix.LocRotScale(bone_pos[0:3], mathutils.Quaternion([bone_rot[3], bone_rot[0], bone_rot[1], bone_rot[2]]), bone_scl[0:3])
             abone = arm.data.edit_bones.new(f"bone_{b}")
             abone.tail = [0, 0.1, 0]
             abone.matrix = bone_mat
